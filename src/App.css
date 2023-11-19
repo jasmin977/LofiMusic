@@ -1,8 +1,13 @@
 .App {
   text-align: center;
+  user-select: none;
 }
 
 .App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+.App-card {
   height: 40vmin;
   pointer-events: none;
 }
@@ -26,6 +31,59 @@
 
 .App-link {
   color: #61dafb;
+}
+
+/*Chrome*/
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .customslider input[type="range"] {
+    overflow: hidden;
+    width: 150px;
+    -webkit-appearance: none;
+    background-color: #79797941;
+    z-index: 1;
+    border-radius: 10px;
+  }
+
+  .customslider input[type="range"]::-webkit-slider-runnable-track {
+    height: 20px;
+    -webkit-appearance: none;
+    margin-top: -2px;
+  }
+
+  .customslider input[type="range"]::-webkit-slider-thumb {
+    width: 20px;
+    -webkit-appearance: none;
+    height: 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    background: #2b2929;
+
+    box-shadow: -80px 0 0 70px #f3a952;
+  }
+
+  .city-rain input[type="range"]::-webkit-slider-thumb {
+    background-image: url("https://app.lofi.co/static/media/rain-city-active.f79df37ec7f658abd12b2b4deb46202e.svg");
+  }
+  .city-traffic input[type="range"]::-webkit-slider-thumb {
+    background-image: url("https://app.lofi.co/static/media/city-active.d70df9fa9773589925d473060688536b.svg");
+  }
+  .people-talking input[type="range"]::-webkit-slider-thumb {
+    background-image: url("https://app.lofi.co/static/media/people-active.7c378946a431e636cba8578536a7cdcf.svg");
+  }
+  .keyboard input[type="range"]::-webkit-slider-thumb {
+    background-image: url("https://app.lofi.co/static/media/keyboard-active.f4e47a2ab178c30d655ae4c0a3f2a06c.svg");
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #413b37;
+  border-radius: 50px;
 }
 
 @keyframes App-logo-spin {

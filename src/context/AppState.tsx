@@ -6,11 +6,13 @@ interface AppState {
   isPlaylistCardVisible: boolean;
   isChatCardVisible: boolean;
   isPomodoroCardVisible: boolean;
+  isInviteUsersCardVisible: boolean;
   toggleMusicCardVisibility: () => void;
   toggleChatCardVisibility: () => void;
   toggleMixerCardVisibility: () => void;
   togglePlaylistCardVisibility: () => void;
   togglePomodoroCardVisibility: () => void;
+  toggleInviteUsersCardVisibility: () => void;
   //city rain sound
   rainIsPlaying: boolean;
   setIsRainPlaying: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,6 +52,8 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({
   const [isPlaylistCardVisible, setIsPlaylistCardVisible] = useState(false);
   const [isChatCardVisible, setIsChatCardVisible] = useState(false);
   const [isPomodoroCardVisible, setIsPomodoroCardVisible] = useState(false);
+  const [isInviteUsersCardVisible, setIsInviteUsersCardVisible] =
+    useState(false);
   //rain sounds
   const [rainIsPlaying, setIsRainPlaying] = useState(false);
   const [rainvolume, setRainVolume] = useState(0.5);
@@ -81,6 +85,9 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({
   const togglePomodoroCardVisibility = () => {
     setIsPomodoroCardVisible((prev) => !prev);
   };
+  const toggleInviteUsersCardVisibility = () => {
+    setIsInviteUsersCardVisible((prev) => !prev);
+  };
 
   const contextValue: AppState = {
     isMusicCardVisible,
@@ -88,7 +95,9 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({
     isMixerCardVisible,
     isPlaylistCardVisible,
     isChatCardVisible,
+    isInviteUsersCardVisible,
     toggleMusicCardVisibility,
+    toggleInviteUsersCardVisibility,
     toggleMixerCardVisibility,
     togglePlaylistCardVisibility,
     toggleChatCardVisibility,

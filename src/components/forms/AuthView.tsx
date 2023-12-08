@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Login from "./Login"; // Adjust the import path
 import Register from "./Register"; // Adjust the import path
 
-const AuthView: React.FC = () => {
+interface Props {
+  joinRomm: (user: any, room: any) => Promise<void>;
+}
+const AuthView = ({ joinRomm }: Props) => {
   const [currentView, setCurrentView] = useState<string>("login");
-  console.log("🚀 ~ file: AuthView.tsx:7 ~ currentView:", currentView);
 
   const switchView = (view: string) => {
     setCurrentView(view);
@@ -13,7 +15,7 @@ const AuthView: React.FC = () => {
   return (
     <>
       {currentView === "login" ? (
-        <Login switchView={switchView} />
+        <Login switchView={switchView} joinRomm={joinRomm} />
       ) : (
         <Register switchView={switchView} />
       )}

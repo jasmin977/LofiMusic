@@ -41,9 +41,18 @@ const AudioPlayer = ({
       }
     }
   }, [isPlaying]);
+
+  useEffect(() => {
+    if (audio) {
+      audio.pause();
+      audio.src = audioUrl;
+      audio.play().then(() => setisPlaying(true));
+    }
+  }, [audioUrl, setisPlaying]);
+
   return (
     <div>
-      <audio loop ref={audioRef} style={{ display: "none" }}>
+      <audio ref={audioRef} style={{ display: "none" }}>
         <source src={audioUrl} type="audio/mp3" />
       </audio>
     </div>

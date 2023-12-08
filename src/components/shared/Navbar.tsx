@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import Clock from "./Clock";
 import {
   Coffee,
@@ -58,21 +58,33 @@ const NavBarItem = ({ children, onClick, tooltipText }: NavbarItemProps) => {
     </div>
   );
 };
-function Navbar() {
+
+interface NavbarProps {
+  joinRomm: (user: any, room: any) => Promise<void>;
+}
+function Navbar({ joinRomm }: NavbarProps) {
   const {
     toggleMusicCardVisibility,
     toggleMixerCardVisibility,
     togglePlaylistCardVisibility,
     toggleChatCardVisibility,
     togglePomodoroCardVisibility,
+    toggleInviteUsersCardVisibility,
   } = useAppState();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   // background music
-  const { volume, isPlaying, setIsPlaying, playNext, playPrev, setVolume } =
-    useMusicContext();
+  const {
+    volume,
+    isPlaying,
+    setIsPlaying,
+    playNext,
+    playPrev,
+
+    setVolume,
+  } = useMusicContext();
   const openDialog = () => {
     setIsDialogOpen(true);
   };
@@ -86,13 +98,14 @@ function Navbar() {
   const openDrawer = () => {
     setIsDrawerOpen(true);
   };
+
   return (
     <>
       <div className="bg-[#372C20] rounded-md border border-[#4D4337] w-[97%] flex-row bottom-10 p-2 py-3 absolute items-center   flex  justify-between">
         <Clock />
 
         <div className="flex gap-2">
-          <NavBarItem tooltipText="Prev" onClick={() => playPrev}>
+          <NavBarItem tooltipText="Prev" onClick={() => playPrev()}>
             <SkipBack size={25} color={Palette.text} />
           </NavBarItem>
           <NavBarItem
@@ -105,7 +118,7 @@ function Navbar() {
               <PauseCircle size={25} color={Palette.text} />
             )}
           </NavBarItem>
-          <NavBarItem tooltipText="Next" onClick={() => playNext}>
+          <NavBarItem tooltipText="Next" onClick={() => playNext()}>
             <SkipForward size={25} color={Palette.text} />
           </NavBarItem>
 
@@ -144,7 +157,7 @@ function Navbar() {
           </NavBarItem>
           <NavBarItem
             tooltipText="Invite friends"
-            onClick={toggleMusicCardVisibility}
+            onClick={toggleInviteUsersCardVisibility}
           >
             <SmilePlus size={25} color={Palette.text} />
           </NavBarItem>
@@ -183,7 +196,7 @@ function Navbar() {
         </div>
       </div>
       <MyDialog isOpen={isDialogOpen} onClose={closeDialog}>
-        <AuthView />
+        <AuthView joinRomm={joinRomm} />
       </MyDialog>
       <Drawer isOpen={isDrawerOpen} onClose={closeDrawer}>
         <h2 className="mb-4 text-xl font-bold">Switch rooms</h2>

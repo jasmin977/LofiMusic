@@ -24,7 +24,7 @@ function AllSoundsPlayer() {
     setIstalkPlaying,
   } = useAppState();
 
-  const { currentSong, volume, isPlaying } = useMusicContext();
+  const { currentSong, volume, isPlaying, setIsPlaying } = useMusicContext();
   return (
     <div>
       <AudioPlayer
@@ -53,7 +53,7 @@ function AllSoundsPlayer() {
       />
       {currentSong && isPlaying && (
         <AudioPlayer
-          setisPlaying={setIsKeyboardPlaying}
+          setisPlaying={setIsPlaying}
           audioUrl={currentSong.url}
           volume={volume / 100}
           isPlaying={isPlaying}

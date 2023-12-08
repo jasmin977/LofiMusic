@@ -2,11 +2,20 @@ import React, { useEffect, useState } from "react";
 import { DraggableCard } from "../../components/shared";
 import { useAppState } from "../../context";
 import { Palette } from "../../themes";
+import formatDate from "../../utilities/DateFormat";
 
-function ChatCard() {
+interface chatProps {
+  sendMessage: (message: any) => Promise<void>;
+  messages: {
+    user: any;
+    message: any;
+    date: any;
+  }[];
+}
+function ChatCard({ messages, sendMessage }: chatProps) {
   const { isChatCardVisible, toggleChatCardVisibility } = useAppState();
 
-  const [messages, setMessages] = useState([
+  /*  const [messages, setMessages] = useState([
     {
       text: "Hi there! This is a message from you.",
       sender: "You",
@@ -19,7 +28,7 @@ function ChatCard() {
       time: new Date(),
       isYou: false,
     },
-  ]);
+  ]); */
   const [newMessage, setNewMessage] = useState("");
 
   const handleSendMessage = () => {
@@ -30,7 +39,8 @@ function ChatCard() {
         time: new Date(),
         isYou: true,
       };
-      setMessages((prevMessages) => [...prevMessages, newMessageObj]);
+      sendMessage(newMessage);
+      //  setMessages((prevMessages) => [...prevMessages, newMessageObj]);
       setNewMessage("");
     }
   };
@@ -56,32 +66,25 @@ function ChatCard() {
           id="message-container"
           className="flex-1 px-2 pt-2 mb-[70px] overflow-y-auto custom-scrollbar"
         >
-          {messages.map((message, index) => (
+          {messages.map((item, index) => (
             <div
               key={index}
-              className={`flex flex-col py-2 items-${
-                message.isYou ? "end" : "start"
+              className={`flex flex-col py-2    items-${
+                true ? "end" : "start"
               } space-y-2`}
             >
               <div
                 style={{
-                  backgroundColor: message.isYou
-                    ? Palette.minicard
-                    : Palette.background,
+                  backgroundColor: true ? Palette.minicard : Palette.background,
                   borderColor: Palette.border,
                   color: Palette.text,
                 }}
                 className="max-w-xs p-2 text-lg font-normal border-2 rounded-lg"
               >
-                {message.text}
+                {item.message}
               </div>
               <span style={{ color: Palette.text }} className="text-sm ">
-                {message.sender} •{" "}
-                {message.time.toLocaleTimeString([], {
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
+                {item.user} • {formatDate(item.date)}
               </span>
             </div>
           ))}

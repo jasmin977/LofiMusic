@@ -1,6 +1,6 @@
 // AttachmentItem.tsx
 import React, { useState } from "react";
-import { usePlaylist } from "../../../context";
+import { usePlaylist, useSignalRContext } from "../../../context";
 import { youtube } from "../../../assets";
 import { Palette } from "../../../themes";
 import { Trash2 } from "lucide-react";
@@ -14,9 +14,19 @@ interface AttachmentItemProps {
 
 const AttachmentItem: React.FC<AttachmentItemProps> = ({ attachment }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { connection } = useSignalRContext();
+  const { currentAttachment, removeFromPlaylist, attachments } = usePlaylist();
 
-  const { currentAttachment, setCurrentAttachment, removeFromPlaylist } =
-    usePlaylist();
+  const handleAttachmentSelection = () => {
+    const attachmentIndex = attachments.findIndex(
+      (a) => a.link === attachment.link
+    );
+    if (attachmentIndex === -1) return;
+    connection?.invoke("SetCurrentAttachment", attachmentIndex);
+  };
+  const handleDeleteAttachment = () => {
+    connection?.invoke("DeleteAttachmentFromPlaylist", attachment);
+  };
   return (
     <div
       key={attachment.link}
@@ -28,10 +38,7 @@ const AttachmentItem: React.FC<AttachmentItemProps> = ({ attachment }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
-        className="flex flex-row gap-2"
-        onClick={() => setCurrentAttachment(attachment)}
-      >
+      <div className="flex flex-row gap-2" onClick={handleAttachmentSelection}>
         <img className="pr-2" src={youtube} alt="youtube" width={30} />
 
         {attachment.title && (
@@ -64,7 +71,7 @@ const AttachmentItem: React.FC<AttachmentItemProps> = ({ attachment }) => {
             color: Palette.background,
           }}
           className="flex items-center h-full px-2 font-semibold rounded-md "
-          onClick={() => removeFromPlaylist(attachment.link)}
+          onClick={handleDeleteAttachment}
         >
           <Trash2 size={15} color={Palette.background} />
         </div>

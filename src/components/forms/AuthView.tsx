@@ -3,9 +3,9 @@ import Login from "./Login"; // Adjust the import path
 import Register from "./Register"; // Adjust the import path
 
 interface Props {
-  joinRomm: (user: any, room: any) => Promise<void>;
+  joinRoom: (user: any, room: any) => Promise<void>;
 }
-const AuthView = ({ joinRomm }: Props) => {
+const AuthView = ({ joinRoom }: Props) => {
   const [currentView, setCurrentView] = useState<string>("login");
 
   const switchView = (view: string) => {
@@ -15,7 +15,7 @@ const AuthView = ({ joinRomm }: Props) => {
   return (
     <>
       {currentView === "login" ? (
-        <Login switchView={switchView} joinRomm={joinRomm} />
+        <Login switchView={switchView} joinRoom={joinRoom} />
       ) : (
         <Register switchView={switchView} />
       )}

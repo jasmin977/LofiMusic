@@ -1,6 +1,6 @@
 import { DraggableCard } from "../../../components/shared";
 import { MyInput } from "../../../components/themed";
-import { useAppState, usePlaylist } from "../../../context";
+import { useAppState, usePlaylist, useSignalRContext } from "../../../context";
 import axios from "axios";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 interface Attachement {
@@ -17,6 +17,7 @@ function InputLink() {
       link: "",
     },
   });
+  const { connection } = useSignalRContext();
   const { addToPlaylist, setCurrentAttachment } = usePlaylist();
   const { isMusicCardVisible, toggleMusicCardVisibility } = useAppState();
 
@@ -39,8 +40,7 @@ function InputLink() {
         title: videoTitle,
       };
 
-      setCurrentAttachment(newAttachment);
-      addToPlaylist(newAttachment);
+      connection?.invoke("AddAttachmentToPlaylist", newAttachment);
 
       data.link = "";
     }

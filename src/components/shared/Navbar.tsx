@@ -60,9 +60,9 @@ const NavBarItem = ({ children, onClick, tooltipText }: NavbarItemProps) => {
 };
 
 interface NavbarProps {
-  joinRomm: (user: any, room: any) => Promise<void>;
+  joinRoom: (user: any, room: any) => Promise<void>;
 }
-function Navbar({ joinRomm }: NavbarProps) {
+function Navbar({ joinRoom }: NavbarProps) {
   const {
     toggleMusicCardVisibility,
     toggleMixerCardVisibility,
@@ -196,7 +196,7 @@ function Navbar({ joinRomm }: NavbarProps) {
         </div>
       </div>
       <MyDialog isOpen={isDialogOpen} onClose={closeDialog}>
-        <AuthView joinRomm={joinRomm} />
+        <AuthView joinRoom={joinRoom} />
       </MyDialog>
       <Drawer isOpen={isDrawerOpen} onClose={closeDrawer}>
         <h2 className="mb-4 text-xl font-bold">Switch rooms</h2>

@@ -9,9 +9,9 @@ interface authDTO {
 }
 interface props {
   switchView: (view: string) => void;
-  joinRomm: (user: any, room: any) => Promise<void>;
+  joinRoom: (user: any, room: any) => Promise<void>;
 }
-function Login({ switchView, joinRomm }: props) {
+function Login({ switchView, joinRoom }: props) {
   const {
     control,
     handleSubmit,
@@ -24,7 +24,7 @@ function Login({ switchView, joinRomm }: props) {
   });
 
   const handleLogin = (data: authDTO) => {
-    joinRomm(data.email, "12345");
+    joinRoom(data.email, "12345");
   };
 
   return (

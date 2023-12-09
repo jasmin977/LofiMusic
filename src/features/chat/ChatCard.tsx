@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { DraggableCard } from "../../components/shared";
-import { useAppState } from "../../context";
+import { useAppState, useSignalRContext } from "../../context";
 import { Palette } from "../../themes";
 import formatDate from "../../utilities/DateFormat";
 
 interface chatProps {
-  sendMessage: (message: any) => Promise<void>;
   messages: {
     user: any;
     message: any;
     date: any;
   }[];
 }
-function ChatCard({ messages, sendMessage }: chatProps) {
+function ChatCard({ messages }: chatProps) {
+  const { connection } = useSignalRContext();
   const { isChatCardVisible, toggleChatCardVisibility } = useAppState();
-
+  const sendMessage = async (message: any) => {
+    try {
+      if (connection) {
+        await connection.invoke("SendMessage", message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   /*  const [messages, setMessages] = useState([
     {
       text: "Hi there! This is a message from you.",

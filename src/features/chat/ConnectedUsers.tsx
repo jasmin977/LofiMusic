@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { DraggableCard } from "../../components/shared";
 import { useAppState } from "../../context";
 import { Palette } from "../../themes";
+import { IUser } from "../../models";
 
 interface ConnectedUsersProps {
-  connectedUsers: string[];
+  connectedUsers: IUser[];
 }
 function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
+  console.log(
+    "🚀 ~ file: ConnectedUsers.tsx:11 ~ ConnectedUsers ~ connectedUsers:",
+    connectedUsers
+  );
   const { isInviteUsersCardVisible, toggleInviteUsersCardVisibility } =
     useAppState();
   const [userToAdd, setUserToAdd] = useState("");
@@ -22,11 +27,11 @@ function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
       w={400}
       isVisible={isInviteUsersCardVisible}
       onToggleVisibility={toggleInviteUsersCardVisibility}
-      title="Users in da romm"
+      title="Users in da room"
     >
       <div className="flex flex-col h-full mx-auto">
         <div className="flex  flex-col  px-2 pt-2 mb-[70px] gap-2 overflow-y-auto  custom-scrollbar">
-          {connectedUsers.map((u: string, idx: number) => (
+          {connectedUsers.map((u: IUser, idx: number) => (
             <div
               className="p-2 text-lg font-normal border-2 rounded-lg "
               style={{
@@ -36,7 +41,7 @@ function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
               }}
               key={idx}
             >
-              {u}
+              {u.firstName}
             </div>
           ))}
         </div>

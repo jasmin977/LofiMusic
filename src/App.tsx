@@ -14,7 +14,7 @@ import PomodoroCard from "./features/pomodoro/PomodoroCard";
 import AllSoundsPlayer from "./features/sounds/AllSoundsPlayer";
 import CityRain from "./features/sounds/CityRain";
 import Mixer from "./features/sounds/Mixer";
-import { IUser } from "./models";
+import { IMessage, IUser } from "./models";
 
 function App() {
   const { connection } = useSignalRContext();
@@ -25,9 +25,7 @@ function App() {
     removeFromPlaylist,
   } = usePlaylist();
 
-  const [messages, setMessages] = useState<
-    { user: any; message: any; date: any }[]
-  >([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [users, setUsers] = useState<IUser[]>([]);
 
   const joinRoom = async (user: any, room: any) => {
@@ -76,8 +74,8 @@ function App() {
     connection?.on("UsersInRoom", (users) => {
       setUsers(users);
     });
-    connection?.on("ReceiveMessage", (user, message, date) => {
-      setMessages((prev) => [...prev, { user, message, date }]);
+    connection?.on("ReceiveMessage", (message, date) => {
+      setMessages((prev) => [...prev, message]);
     });
 
     return () => {

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DraggableCard } from "../../components/shared";
-import { useAppState } from "../../context";
+import { useAppState, useSignalRContext } from "../../context";
 import { Palette } from "../../themes";
 import { HopOff, Pause, Play, Plus, RotateCcw, Zap } from "lucide-react";
+import { IPomodorClock } from "../../models";
 
 function PomodoroCard() {
+  const { connection } = useSignalRContext();
   const [isActive, setIsActive] = useState(false);
   const [seconds, setSeconds] = useState(10); // 25 minutes in seconds
   const [isBreak, setIsBreak] = useState(false);
@@ -12,6 +14,7 @@ function PomodoroCard() {
   const [breakDuration, setBreakDuration] = useState(5 * 60); // 5 minutes in seconds */
   const [workDuration, setWorkDuration] = useState(10); // 25 minutes in seconds
   const [breakDuration, setBreakDuration] = useState(5); // 5 minutes in seconds
+  const progress = ((workDuration - seconds) / workDuration) * 100;
 
   useEffect(() => {
     let interval: any;
@@ -30,9 +33,31 @@ function PomodoroCard() {
 
     return () => clearInterval(interval);
   }, [isActive, seconds, isBreak, workDuration, breakDuration]);
-  const progress = ((workDuration - seconds) / workDuration) * 100;
-
+  useEffect(() => {
+    connection?.on(
+      "UpdatePomodorTimer",
+      (userName: string, timer: IPomodorClock, date: string) => {
+        setTimer(
+          timer.workDurationMinutes,
+          timer.breakDurationMinutes,
+          timer.isRunning
+        );
+      }
+    );
+    connection?.on("ReceiveStartPomodorTimer", (userName, date) => {
+      setIsActive(true);
+    });
+    connection?.on("ReceiveStopPomodorTimer", (userName, date) => {
+      setIsActive(false);
+    });
+    return () => {
+      connection?.off("UpdatePomodorTimer");
+      connection?.off("ReceiveStartPomodorTimer");
+      connection?.off("ReceiveStopPomodorTimer");
+    };
+  }, [connection]);
   const handleStartStop = () => {
+    togglePomodorTimer(!isActive);
     setIsActive((prevIsActive) => !prevIsActive);
   };
 
@@ -41,18 +66,46 @@ function PomodoroCard() {
     setIsActive(true);
   };
 
-  const handleModeChange = (
+  const setTimer = (
     newWorkDurationInMinutes: number,
-    newBreakDurationInMinutes: number
+    newBreakDurationInMinutes: number,
+    isActive: boolean
   ) => {
     const newWorkDuration = newWorkDurationInMinutes * 60;
     const newBreakDuration = newBreakDurationInMinutes * 60;
-
     setWorkDuration(newWorkDuration);
     setBreakDuration(newBreakDuration);
     setSeconds(isBreak ? newBreakDuration : newWorkDuration);
     setIsBreak(false);
-    setIsActive(false);
+    setIsActive(isActive);
+  };
+
+  const handleModeChange = (
+    newWorkDurationInMinutes: number,
+    newBreakDurationInMinutes: number
+  ) => {
+    console.log(
+      "🚀 ~ file: PomodoroCard.tsx:88 ~ PomodoroCard ~ newWorkDurationInMinutes, newBreakDurationInMinutes:",
+      newWorkDurationInMinutes,
+      newBreakDurationInMinutes
+    );
+    SetPomodorTimer(newWorkDurationInMinutes, newBreakDurationInMinutes);
+  };
+
+  const SetPomodorTimer = (
+    workDurationInMinutes: number,
+    breakDurationInMinutes: number
+  ) => {
+    connection
+      ?.invoke("SetPomodorTimer", {
+        WorkDurationMinutes: workDurationInMinutes,
+        BreakDurationMinutes: breakDurationInMinutes,
+      })
+      .then(() => console.log("SetPomodorTimer"))
+      .catch((err) => console.log(err));
+  };
+  const togglePomodorTimer = (isRunning: boolean) => {
+    connection?.invoke(isRunning ? "StartPomodorTimer" : "StopPomodorTimer");
   };
 
   const { isPomodoroCardVisible, togglePomodoroCardVisibility } = useAppState();

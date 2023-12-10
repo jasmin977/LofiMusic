@@ -3,13 +3,10 @@ import { DraggableCard } from "../../components/shared";
 import { useAppState, useSignalRContext } from "../../context";
 import { Palette } from "../../themes";
 import formatDate from "../../utilities/DateFormat";
+import { IMessage } from "../../models";
 
 interface chatProps {
-  messages: {
-    user: any;
-    message: any;
-    date: any;
-  }[];
+  messages: IMessage[];
 }
 function ChatCard({ messages }: chatProps) {
   const { connection } = useSignalRContext();
@@ -76,7 +73,7 @@ function ChatCard({ messages }: chatProps) {
         >
           {messages.map((item, index) => (
             <div
-              key={index}
+              key={item.id}
               className={`flex flex-col py-2    items-${
                 true ? "end" : "start"
               } space-y-2`}
@@ -89,10 +86,11 @@ function ChatCard({ messages }: chatProps) {
                 }}
                 className="max-w-xs p-2 text-lg font-normal border-2 rounded-lg"
               >
-                {item.message}
+                {item.content}
               </div>
               <span style={{ color: Palette.text }} className="text-sm ">
-                {item.user} • {formatDate(item.date)}
+                {item.sender ? item.sender?.firstName : "boboBot"} •{" "}
+                {formatDate(item.createdAt)}
               </span>
             </div>
           ))}

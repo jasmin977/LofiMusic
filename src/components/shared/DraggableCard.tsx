@@ -11,7 +11,9 @@ interface DraggableCardProps {
   w?: number;
   h?: number;
   isVisible: boolean;
+  zIndex?: number;
   onToggleVisibility?: (v: boolean) => void;
+  bringToFront?: () => void;
 }
 
 const DraggableCard: React.FC<DraggableCardProps> = ({
@@ -19,16 +21,16 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
   title,
   isVisible,
   onToggleVisibility,
+  zIndex,
+  bringToFront,
   x,
   y,
   h,
   w,
 }) => {
-  const [zIndex, setZIndex] = useState(1);
-
-  const handleCardClick = () => {
-    // setZIndex((prevZIndex) => prevZIndex + 1);
-  };
+  /* const handleCardClick = () => {
+    setZIndex((prevZIndex) => prevZIndex + 1);
+  }; */
   const handleClickClose = () => {
     if (onToggleVisibility !== undefined) {
       onToggleVisibility(!isVisible);
@@ -48,11 +50,11 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
       }}
       className={`     flex bg-[#292017ef]    rounded-xl border border-[#4D4337] pt-10 p-2  cursor-move  `}
       style={{
-        backdropFilter: "blur(5px)",
-        //  zIndex: zIndex,
+        backdropFilter: "blur(10px)",
+        zIndex: zIndex,
       }}
       cancel=".no-drag"
-      onDrag={handleCardClick}
+      onDrag={bringToFront}
     >
       <div className="absolute flex flex-row justify-between w-full px-4 top-2 ">
         <div></div>

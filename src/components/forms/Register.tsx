@@ -2,6 +2,8 @@ import React from "react";
 import { MyButton, MyInput } from "../themed";
 import { Controller, useForm } from "react-hook-form";
 import { Palette } from "../../themes";
+import { useAuth } from "../../context";
+import { IUser } from "../../models";
 
 interface registerDTO {
   username: string;
@@ -13,6 +15,7 @@ interface props {
   switchView: (view: string) => void;
 }
 function Register({ switchView }: props) {
+  const { setUser } = useAuth();
   const {
     control,
     handleSubmit,
@@ -25,7 +28,13 @@ function Register({ switchView }: props) {
     },
   });
 
-  const handleRegister = (data: registerDTO) => {};
+  const handleRegister = (data: registerDTO) => {
+    const loggedinuser: IUser = {
+      username: data.username,
+      email: data.email,
+    };
+    setUser(loggedinuser);
+  };
 
   return (
     <div className="p-4">

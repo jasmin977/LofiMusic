@@ -15,6 +15,8 @@ import AllSoundsPlayer from "./features/sounds/AllSoundsPlayer";
 import CityRain from "./features/sounds/CityRain";
 import Mixer from "./features/sounds/Mixer";
 import { IMessage, IUser } from "./models";
+import { MyDialog } from "./components/themed";
+import AuthView from "./components/forms/AuthView";
 
 function App() {
   const { connection } = useSignalRContext();
@@ -27,7 +29,10 @@ function App() {
 
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [users, setUsers] = useState<IUser[]>([]);
-
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
   const joinRoom = async (user: any, room: any) => {
     if (!connection) return;
     try {
@@ -103,6 +108,9 @@ function App() {
       <Navbar joinRoom={joinRoom} />
 
       <AllSoundsPlayer />
+      <MyDialog isOpen={isDialogOpen} onClose={closeDialog}>
+        <AuthView joinRoom={joinRoom} />
+      </MyDialog>
     </VideoBackground>
   );
 }

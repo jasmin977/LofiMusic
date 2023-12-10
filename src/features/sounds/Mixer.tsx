@@ -1,7 +1,7 @@
 import React from "react";
 import { DraggableCard, MiniCard } from "../../components/shared";
 import VolumeSlider from "../../components/themed/Slider";
-import { useAppState, useMusicContext } from "../../context";
+import { useAppState, useAppuStatu, useMusicContext } from "../../context";
 import { Coffee, Disc3, Moon, Volume1, Volume2 } from "lucide-react";
 import { Palette } from "../../themes";
 
@@ -45,9 +45,9 @@ const SoundItem = ({
 function Mixer() {
   const {
     rainvolume,
-    isMixerCardVisible,
+
     setRainVolume,
-    toggleMixerCardVisibility,
+
     talkvolume,
     setTalkVolume,
     keyboardVolume,
@@ -55,6 +55,7 @@ function Mixer() {
     setTrafficVolume,
     trafficvolume,
   } = useAppState();
+  const { mixerCard } = useAppuStatu();
 
   const { volume, setVolume, setSongType, songType } = useMusicContext();
   return (
@@ -63,8 +64,11 @@ function Mixer() {
       y={20}
       h={500}
       w={350}
-      isVisible={isMixerCardVisible}
-      onToggleVisibility={toggleMixerCardVisibility}
+      isVisible={mixerCard.isVisible}
+      onToggleVisibility={mixerCard.toggleVisibility}
+      zIndex={mixerCard.zindex}
+      bringToFront={mixerCard.bringToFront}
+      // title={mixerCard.zindex.toString()}
     >
       <div className="flex flex-col gap-4 p-2">
         <div className="flex gap-2 ">

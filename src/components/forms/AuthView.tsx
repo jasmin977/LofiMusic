@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Login from "./Login"; // Adjust the import path
 import Register from "./Register"; // Adjust the import path
+import { Carousel } from "../themed";
+import EnterRoom from "./EnterRoom";
+import MyRooms from "./MyRooms";
 
 interface Props {
   joinRoom: (user: any, room: any) => Promise<void>;
@@ -15,9 +18,15 @@ const AuthView = ({ joinRoom }: Props) => {
   return (
     <>
       {currentView === "login" ? (
-        <Login switchView={switchView} joinRoom={joinRoom} />
+        <Carousel>
+          <Login switchView={switchView} />
+          <MyRooms joinRoom={joinRoom} />
+        </Carousel>
       ) : (
-        <Register switchView={switchView} />
+        <Carousel>
+          <Register switchView={switchView} />
+          <EnterRoom joinRoom={joinRoom} />
+        </Carousel>
       )}
     </>
   );

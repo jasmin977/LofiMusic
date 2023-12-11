@@ -1,6 +1,6 @@
 import { DraggableCard } from "../../../components/shared";
 import { MyInput } from "../../../components/themed";
-import { useAppState, usePlaylist, useSignalRContext } from "../../../context";
+import { useAppuStatu, usePlaylist, useSignalRContext } from "../../../context";
 import axios from "axios";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 interface Attachement {
@@ -19,7 +19,7 @@ function InputLink() {
   });
   const { connection } = useSignalRContext();
   const { addToPlaylist, setCurrentAttachment } = usePlaylist();
-  const { isMusicCardVisible, toggleMusicCardVisibility } = useAppState();
+  const { musicCard } = useAppuStatu();
 
   const extractVideoId = (url: string): string | null => {
     const match = url.match(/[?&]v=([^?&]+)/);
@@ -51,8 +51,11 @@ function InputLink() {
       y={window.innerHeight / 6}
       w={350}
       h={100}
-      isVisible={isMusicCardVisible}
-      onToggleVisibility={toggleMusicCardVisibility}
+      isVisible={musicCard.isVisible}
+      onToggleVisibility={musicCard.toggleVisibility}
+      zIndex={musicCard.zindex}
+      bringToFront={musicCard.bringToFront}
+      //   title={musicCard.zindex.toString()}
     >
       <Controller
         control={control}

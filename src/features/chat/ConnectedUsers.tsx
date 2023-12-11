@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DraggableCard } from "../../components/shared";
-import { useAppState } from "../../context";
+import { useAppuStatu } from "../../context";
 import { Palette } from "../../themes";
 import { IUser } from "../../models";
 
@@ -12,8 +12,7 @@ function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
     "🚀 ~ file: ConnectedUsers.tsx:11 ~ ConnectedUsers ~ connectedUsers:",
     connectedUsers
   );
-  const { isInviteUsersCardVisible, toggleInviteUsersCardVisibility } =
-    useAppState();
+  const { inviteUsersCard } = useAppuStatu();
   const [userToAdd, setUserToAdd] = useState("");
 
   const handleAddUser = () => {
@@ -25,9 +24,12 @@ function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
     <DraggableCard
       h={300}
       w={400}
-      isVisible={isInviteUsersCardVisible}
-      onToggleVisibility={toggleInviteUsersCardVisibility}
+      isVisible={inviteUsersCard.isVisible}
+      onToggleVisibility={inviteUsersCard.toggleVisibility}
+      zIndex={inviteUsersCard.zindex}
+      bringToFront={inviteUsersCard.bringToFront}
       title="Users in da room"
+      //title={inviteUsersCard.zindex.toString()}
     >
       <div className="flex flex-col h-full mx-auto">
         <div className="flex  flex-col  px-2 pt-2 mb-[70px] gap-2 overflow-y-auto  custom-scrollbar">
@@ -41,7 +43,7 @@ function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
               }}
               key={idx}
             >
-              {u.firstName}
+              {u.username}
             </div>
           ))}
         </div>

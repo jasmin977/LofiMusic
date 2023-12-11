@@ -1,4 +1,5 @@
 import MyInput from "./MyInput";
 import MyDialog from "./Dialog";
 import MyButton from "./MyButton";
-export { MyInput, MyDialog, MyButton };
+import Carousel from "./Carousel";
+export { MyInput, MyDialog, MyButton, Carousel };

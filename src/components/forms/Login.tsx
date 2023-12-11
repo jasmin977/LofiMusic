@@ -2,33 +2,38 @@ import React from "react";
 import { MyButton, MyInput } from "../themed";
 import { Controller, useForm } from "react-hook-form";
 import { Palette } from "../../themes";
+import { useAuth } from "../../context";
+import { IUser } from "../../models";
 
 interface authDTO {
-  email: string;
+  username: string;
   password: string;
 }
 interface props {
   switchView: (view: string) => void;
-  joinRoom: (user: any, room: any) => Promise<void>;
 }
-function Login({ switchView, joinRoom }: props) {
+function Login({ switchView }: props) {
+  const { setUser } = useAuth();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<authDTO>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
   const handleLogin = (data: authDTO) => {
-    joinRoom(data.email, "12345");
+    const loggedinuser: IUser = {
+      username: data.username,
+    };
+    setUser(loggedinuser);
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 ">
       <div className="flex flex-col items-center gap-2 text-white">
         <span className="text-5xl font-semibold">Welcome back !</span>
         <span className="text-2xl font-medium">Log in to your account</span>
@@ -41,12 +46,16 @@ function Login({ switchView, joinRoom }: props) {
           <Controller
             control={control}
             rules={{
-              required: "Email can't be empty.",
+              required: "Username can't be empty.",
             }}
             render={({ field: { onChange, value } }) => (
-              <MyInput placeholder="Email" onChange={onChange} value={value} />
+              <MyInput
+                placeholder="Username"
+                onChange={onChange}
+                value={value}
+              />
             )}
-            name="email"
+            name="username"
           />
           <div className="w-full h-[1px] bg-[#00000050]"></div>
           <Controller

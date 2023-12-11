@@ -7,7 +7,9 @@ interface DrawerProps {
 }
 
 const Drawer = ({ isOpen, onClose, children }: DrawerProps) => {
-  const overlayClasses = isOpen ? "fixed inset-0 bg-[#0000009d]   " : "hidden";
+  const overlayClasses = isOpen
+    ? "fixed inset-0 bg-[#0000009d] z-40  "
+    : "hidden";
 
   return (
     <div>
@@ -17,7 +19,7 @@ const Drawer = ({ isOpen, onClose, children }: DrawerProps) => {
         onClick={onClose}
       ></div>
       <div
-        className={`fixed inset-y-0 right-0 bg-[#1E1B18] text-white p-4 w-64 ${
+        className={`fixed inset-y-0 right-0 bg-[#1E1B18] text-white p-4 w-64 z-50 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform ease-in-out duration-300`}
       >

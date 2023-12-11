@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DraggableCard } from "../../components/shared";
-import { useAppState } from "../../context";
+import { useAppuStatu } from "../../context";
 import { Palette } from "../../themes";
 import { HopOff, Pause, Play, Plus, RotateCcw, Zap } from "lucide-react";
 
@@ -55,14 +55,17 @@ function PomodoroCard() {
     setIsActive(false);
   };
 
-  const { isPomodoroCardVisible, togglePomodoroCardVisibility } = useAppState();
+  const { pomodoroCard } = useAppuStatu();
 
   return (
     <DraggableCard
-      isVisible={isPomodoroCardVisible}
-      onToggleVisibility={togglePomodoroCardVisibility}
+      isVisible={pomodoroCard.isVisible}
+      onToggleVisibility={pomodoroCard.toggleVisibility}
       h={250}
       w={400}
+      zIndex={pomodoroCard.zindex}
+      bringToFront={pomodoroCard.bringToFront}
+      //title={pomodoroCard.zindex.toString()}
     >
       <div className="p-2 text-center">
         <p className="space-x-0 text-5xl font-semibold tracking-wide text-white ">

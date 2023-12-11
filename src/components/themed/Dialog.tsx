@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { Palette } from "../../themes";
+import { useAuth } from "../../context";
 
 interface CustomDialogProps {
   isOpen: boolean;
@@ -13,9 +14,18 @@ const MyDialog: React.FC<CustomDialogProps> = ({
   onClose,
   children,
 }) => {
-  const overlayClasses = isOpen ? "fixed inset-0 bg-[#0000009d]   " : "hidden";
+  const { roomId } = useAuth();
+  useEffect(() => {
+    if (roomId) {
+      onClose();
+    }
+  }, [roomId]);
+
+  const overlayClasses = isOpen
+    ? "fixed inset-0 bg-[#0000009d] z-40  "
+    : "hidden";
   const dialogClasses = isOpen
-    ? "fixed top-1/2 left-1/2 transform   -translate-x-1/2 -translate-y-1/2 bg-[#1e1b180] p-4 rounded-md  "
+    ? "fixed top-1/2 left-1/2 transform z-50  -translate-x-1/2 -translate-y-1/2 bg-[#1e1b180] p-4 rounded-md  "
     : "hidden ";
 
   return (
@@ -23,14 +33,14 @@ const MyDialog: React.FC<CustomDialogProps> = ({
       <div
         className={overlayClasses}
         style={{ backdropFilter: "blur(5px)" }}
-        onClick={onClose}
+        // onClick={onClose}
       >
-        <button
+        {/*  <button
           className="absolute text-gray-500 top-4 right-4 hover:text-gray-700"
           onClick={onClose}
         >
           <X size={30} color={Palette.text} />
-        </button>
+        </button> */}
       </div>
 
       <div className={dialogClasses}>

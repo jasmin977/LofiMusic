@@ -2,6 +2,7 @@ import React, { ReactNode, useRef, useState } from "react";
 import Clock from "./Clock";
 import {
   Coffee,
+  Copy,
   Link,
   ListMusic,
   MessageCircle,
@@ -18,13 +19,14 @@ import {
   VolumeX,
 } from "lucide-react";
 import { Palette } from "../../themes";
-import { useAppState, useMusicContext } from "../../context";
+import { useAppuStatu, useAuth, useMusicContext } from "../../context";
 
-import { MyDialog } from "../themed";
+import { MyButton, MyDialog } from "../themed";
 import AuthView from "../forms/AuthView";
 import Drawer from "../themed/Drawer";
 import Fullscreen from "../../features/Fullscreen";
 import VolumeSlider from "../themed/Slider";
+import RoomList from "./RoomsList";
 
 interface NavbarItemProps {
   onClick: () => void;
@@ -64,16 +66,33 @@ interface NavbarProps {
 }
 function Navbar({ joinRoom }: NavbarProps) {
   const {
-    toggleMusicCardVisibility,
-    toggleMixerCardVisibility,
-    togglePlaylistCardVisibility,
-    toggleChatCardVisibility,
-    togglePomodoroCardVisibility,
-    toggleInviteUsersCardVisibility,
-  } = useAppState();
-  const [isDialogOpen, setIsDialogOpen] = useState(true);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    musicCard,
+    mixerCard,
+    playlistCard,
+    chatCard,
+    pomodoroCard,
+    inviteUsersCard,
+  } = useAppuStatu();
+
+  const [isRoomDrawerOpen, setRoomDrawerOpen] = useState(false);
+  const [isAccountDrawerOpen, setAccountDrawerOpen] = useState(false);
+
+  const openRoomDrawer = () => {
+    setRoomDrawerOpen(true);
+    setAccountDrawerOpen(false);
+  };
+
+  const openAccountDrawer = () => {
+    setAccountDrawerOpen(true);
+    setRoomDrawerOpen(false);
+  };
+
+  const closeDrawer = () => {
+    setRoomDrawerOpen(false);
+    setAccountDrawerOpen(false);
+  };
   const [isHovered, setIsHovered] = useState(false);
+  const { roomId } = useAuth();
 
   // background music
   const {
@@ -85,19 +104,6 @@ function Navbar({ joinRoom }: NavbarProps) {
 
     setVolume,
   } = useMusicContext();
-  const openDialog = () => {
-    setIsDialogOpen(true);
-  };
-
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-  };
-  const closeDrawer = () => {
-    setIsDrawerOpen(false);
-  };
-  const openDrawer = () => {
-    setIsDrawerOpen(true);
-  };
 
   return (
     <>
@@ -143,48 +149,53 @@ function Navbar({ joinRoom }: NavbarProps) {
 
           <div className="h-8 border-l border-[#4D4337]   mx-2"></div>
 
-          <NavBarItem tooltipText="Mixer" onClick={toggleMixerCardVisibility}>
+          <NavBarItem tooltipText="Mixer" onClick={mixerCard.toggleVisibility}>
             <Sliders size={25} color={Palette.text} />
           </NavBarItem>
-          <NavBarItem tooltipText="Links" onClick={toggleMusicCardVisibility}>
+          <NavBarItem tooltipText="Links" onClick={musicCard.toggleVisibility}>
             <Link size={25} color={Palette.text} />
           </NavBarItem>
           <NavBarItem
             tooltipText="Pomodoro"
-            onClick={togglePomodoroCardVisibility}
+            onClick={pomodoroCard.toggleVisibility}
           >
             <Timer size={25} color={Palette.text} />
           </NavBarItem>
           <NavBarItem
             tooltipText="Invite friends"
-            onClick={toggleInviteUsersCardVisibility}
+            onClick={inviteUsersCard.toggleVisibility}
           >
             <SmilePlus size={25} color={Palette.text} />
           </NavBarItem>
           <NavBarItem
             tooltipText="Playlist"
-            onClick={togglePlaylistCardVisibility}
+            onClick={playlistCard.toggleVisibility}
           >
             <ListMusic size={25} color={Palette.text} />
           </NavBarItem>
-          <NavBarItem tooltipText="Chat" onClick={toggleChatCardVisibility}>
+          <NavBarItem tooltipText="Chat" onClick={chatCard.toggleVisibility}>
             <MessageCircle size={25} color={Palette.text} />
           </NavBarItem>
           <div className="h-8 border-l border-[#4D4337]   mx-2"></div>
 
-          <NavBarItem
-            tooltipText="Fullscreen"
-            onClick={toggleMusicCardVisibility}
-          >
+          <NavBarItem tooltipText="Fullscreen" onClick={() => {}}>
             <Fullscreen />
+          </NavBarItem>
+          <NavBarItem
+            tooltipText="Copy room link"
+            onClick={() => {
+              navigator.clipboard.writeText(roomId as string);
+            }}
+          >
+            <Copy size={25} color={Palette.text} />
           </NavBarItem>
         </div>
 
         <div className="flex gap-2">
-          <NavBarItem tooltipText="Change room" onClick={() => openDrawer()}>
+          <NavBarItem tooltipText="Change room" onClick={openRoomDrawer}>
             <Coffee size={25} color={Palette.text} />
           </NavBarItem>
-          <NavBarItem tooltipText="Account" onClick={() => openDialog()}>
+          <NavBarItem tooltipText="Account" onClick={openAccountDrawer}>
             <UserCircle2 size={25} color={Palette.text} />
           </NavBarItem>
           <NavBarItem
@@ -195,16 +206,32 @@ function Navbar({ joinRoom }: NavbarProps) {
           </NavBarItem>
         </div>
       </div>
-      <MyDialog isOpen={isDialogOpen} onClose={closeDialog}>
-        <AuthView joinRoom={joinRoom} />
-      </MyDialog>
-      <Drawer isOpen={isDrawerOpen} onClose={closeDrawer}>
-        <h2 className="mb-4 text-xl font-bold">Switch rooms</h2>
-        <ul>
-          <li className="mb-2">Room 1</li>
-          <li className="mb-2">Room 2</li>
-          <li className="mb-2">Room 3</li>
-        </ul>
+
+      <Drawer isOpen={isRoomDrawerOpen} onClose={closeDrawer}>
+        <RoomList
+          h="500px"
+          joinRoom={joinRoom}
+          title={<span className="text-2xl font-semibold">Switch rooms</span>}
+          rooms={[
+            "room1",
+            "room2",
+            "room3",
+            "room4",
+            "room5",
+            "room6",
+            "room2",
+            "room3",
+            "room4",
+            "room5",
+          ]}
+        />
+      </Drawer>
+
+      <Drawer isOpen={isAccountDrawerOpen} onClose={closeDrawer}>
+        <h2 className="mb-4 text-xl font-bold text-center">Account</h2>
+        <div className="flex justify-center ">
+          <MyButton label="Log out" onClick={() => {}} />
+        </div>
       </Drawer>
     </>
   );

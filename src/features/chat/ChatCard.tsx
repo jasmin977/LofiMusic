@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DraggableCard } from "../../components/shared";
-import { useAppState, useSignalRContext } from "../../context";
+import { useAppuStatu, useSignalRContext } from "../../context";
 import { Palette } from "../../themes";
 import formatDate from "../../utilities/DateFormat";
 
@@ -13,7 +13,8 @@ interface chatProps {
 }
 function ChatCard({ messages }: chatProps) {
   const { connection } = useSignalRContext();
-  const { isChatCardVisible, toggleChatCardVisibility } = useAppState();
+  const { chatCard } = useAppuStatu();
+
   const sendMessage = async (message: any) => {
     try {
       if (connection) {
@@ -65,9 +66,11 @@ function ChatCard({ messages }: chatProps) {
     <DraggableCard
       h={450}
       w={400}
-      isVisible={isChatCardVisible}
-      onToggleVisibility={toggleChatCardVisibility}
-      title="Chat"
+      isVisible={chatCard.isVisible}
+      onToggleVisibility={chatCard.toggleVisibility}
+      zIndex={chatCard.zindex}
+      bringToFront={chatCard.bringToFront}
+      title={"Chat"}
     >
       <div className="flex flex-col h-full mx-auto">
         <div

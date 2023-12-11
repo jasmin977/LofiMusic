@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import {
   AppStateProvider,
+  AppuStatuProvidu,
+  AuthProvider,
   MusicProvider,
   PlaylistProvider,
   SignalRContextProvider,
@@ -14,15 +16,19 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <SignalRContextProvider>
-      <AppStateProvider>
-        <MusicProvider>
-          <PlaylistProvider>
-            <App />
-          </PlaylistProvider>
-        </MusicProvider>
-      </AppStateProvider>
-    </SignalRContextProvider>
+    <AuthProvider>
+      <SignalRContextProvider>
+        <AppStateProvider>
+          <AppuStatuProvidu>
+            <MusicProvider>
+              <PlaylistProvider>
+                <App />
+              </PlaylistProvider>
+            </MusicProvider>
+          </AppuStatuProvidu>
+        </AppStateProvider>
+      </SignalRContextProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 

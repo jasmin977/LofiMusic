@@ -1,6 +1,5 @@
 export type IUser = {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  email: string;
+  userId?: number;
+  username: string;
+  email?: string;
 };

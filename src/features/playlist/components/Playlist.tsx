@@ -23,8 +23,11 @@ function Playlist() {
     >
       <div className="flex flex-col h-full mx-auto">
         <div className="flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-          {attachments.map((attachment: Attachement) => (
-            <AttachmentItem attachment={attachment} />
+          {attachments.map((attachment: Attachement, idx) => (
+            <AttachmentItem
+              key={attachment.link + idx}
+              attachment={attachment}
+            />
           ))}
         </div>
       </div>

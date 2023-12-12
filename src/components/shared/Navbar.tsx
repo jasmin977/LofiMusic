@@ -92,7 +92,7 @@ function Navbar({ joinRoom }: NavbarProps) {
     setAccountDrawerOpen(false);
   };
   const [isHovered, setIsHovered] = useState(false);
-  const { roomId } = useAuth();
+  const { room } = useAuth();
 
   // background music
   const {
@@ -184,7 +184,7 @@ function Navbar({ joinRoom }: NavbarProps) {
           <NavBarItem
             tooltipText="Copy room link"
             onClick={() => {
-              navigator.clipboard.writeText(roomId as string);
+              room?.id && navigator.clipboard.writeText(room.id);
             }}
           >
             <Copy size={25} color={Palette.text} />
@@ -207,8 +207,9 @@ function Navbar({ joinRoom }: NavbarProps) {
         </div>
       </div>
 
+      {/*
       <Drawer isOpen={isRoomDrawerOpen} onClose={closeDrawer}>
-        <RoomList
+         <RoomList
           h="500px"
           joinRoom={joinRoom}
           title={<span className="text-2xl font-semibold">Switch rooms</span>}
@@ -224,8 +225,9 @@ function Navbar({ joinRoom }: NavbarProps) {
             "room4",
             "room5",
           ]}
-        />
+        /> 
       </Drawer>
+        */}
 
       <Drawer isOpen={isAccountDrawerOpen} onClose={closeDrawer}>
         <h2 className="mb-4 text-xl font-bold text-center">Account</h2>

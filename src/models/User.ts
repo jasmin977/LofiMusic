@@ -1,6 +1,6 @@
 export type IUser = {
   userId?: number;
-  username: string;
+  userName: string;
   email?: string;
 };
 
@@ -9,6 +9,25 @@ export type IMessage = {
   content: string;
   sender: IUser | null;
   createdAt: string;
+};
+
+export type IRoom = {
+  id: string;
+  name: string;
+  syncPlayer: ISyncPlayer;
+  pomodorClock: IPomodorClock;
+  conversation: IMessage[];
+};
+
+export type ISyncPlayer = {
+  currentAttachmentIndex: number;
+  currentAttachmentProgress: number;
+  id: string;
+  isPlaying: boolean;
+  playlist: {
+    link: string;
+    name: string;
+  }[];
 };
 
 export type IPomodorClock = {

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { BooleanLiteral } from "typescript";
 
 interface Attachement {
   link: string;
@@ -8,6 +9,9 @@ interface Attachement {
 // Define the context type
 interface PlaylistContextType {
   attachments: Attachement[];
+  isPlaying: boolean;
+  setAttachments: React.Dispatch<React.SetStateAction<Attachement[]>>;
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
   addToPlaylist: (attachment: Attachement) => void;
   playNextAttachment: () => void;
   removeFromPlaylist: (attachmentId: string) => void;
@@ -28,6 +32,8 @@ interface PlaylistProviderProps {
 // Create the PlaylistProvider component
 const PlaylistProvider: React.FC<PlaylistProviderProps> = ({ children }) => {
   const [attachments, setAttachments] = useState<Attachement[]>([]);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+
   const [currentAttachment, setCurrentAttachment] =
     useState<Attachement | null>(null);
 
@@ -57,7 +63,10 @@ const PlaylistProvider: React.FC<PlaylistProviderProps> = ({ children }) => {
   return (
     <PlaylistContext.Provider
       value={{
+        isPlaying,
+        setIsPlaying,
         attachments,
+        setAttachments,
         currentAttachment,
         setCurrentAttachment,
         addToPlaylist,

@@ -1,1 +1,7 @@
-export type { IUser, IMessage, IPomodorClock } from "./User";
+export type {
+  IUser,
+  IMessage,
+  IPomodorClock,
+  IRoom,
+  ISyncPlayer,
+} from "./User";

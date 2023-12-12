@@ -6,7 +6,7 @@ import EnterRoom from "./EnterRoom";
 import MyRooms from "./MyRooms";
 
 interface Props {
-  joinRoom: (user: any, room: any) => Promise<void>;
+  joinRoom: (room: any) => Promise<void>;
 }
 const AuthView = ({ joinRoom }: Props) => {
   const [currentView, setCurrentView] = useState<string>("login");

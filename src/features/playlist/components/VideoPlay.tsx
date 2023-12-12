@@ -5,8 +5,8 @@ import { usePlaylist, useSignalRContext } from "../../../context";
 
 function VideoPlay() {
   const { connection } = useSignalRContext();
+  const { isPlaying, setIsPlaying } = usePlaylist();
   const { currentAttachment, playNextAttachment } = usePlaylist();
-  const [isPlaying, setIsPlaying] = React.useState(false);
   const playerRef = React.useRef<ReactPlayer>(null);
   React.useEffect(() => {
     if (playerRef.current) {

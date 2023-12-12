@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Palette } from "../../themes";
 import { useAuth } from "../../context";
 import { IUser } from "../../models";
+import axios from "axios";
 
 interface registerDTO {
   username: string;
@@ -29,11 +30,29 @@ function Register({ switchView }: props) {
   });
 
   const handleRegister = (data: registerDTO) => {
+    console.log(
+      "🚀 ~ file: Register.tsx:51 ~ handleRegister ~ handleRegister:"
+    );
     const loggedinuser: IUser = {
-      username: data.username,
+      userName: data.username,
       email: data.email,
     };
-    setUser(loggedinuser);
+    axios
+      .post("https://localhost:7270/api/Users", {
+        userId: Math.floor(Math.random() * 1000),
+        userName: data.username,
+        password: data.password,
+        email: data.email,
+        rooms: [],
+      })
+      .then((res) => {
+        console.log("🚀 ~ file: Register.tsx:46 ~ .then ~ res:", res);
+        setUser({
+          ...loggedinuser,
+          userId: res.data.userId,
+        });
+      })
+      .catch((err) => console.error(err));
   };
 
   return (

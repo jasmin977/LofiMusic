@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Palette } from "../../themes";
 import { useAuth } from "../../context";
 import { IUser } from "../../models";
+import axios from "axios";
 
 interface authDTO {
   username: string;
@@ -20,16 +21,21 @@ function Login({ switchView }: props) {
     formState: { errors },
   } = useForm<authDTO>({
     defaultValues: {
-      username: "",
-      password: "",
+      username: "bobo",
+      password: "password",
     },
   });
 
   const handleLogin = (data: authDTO) => {
-    const loggedinuser: IUser = {
-      username: data.username,
-    };
-    setUser(loggedinuser);
+    axios
+      .post("https://localhost:7270/api/Users/Login", {
+        userName: data.username,
+        password: data.password,
+      })
+      .then(({ data }) => {
+        setUser(data);
+      })
+      .catch((err) => console.error(err));
   };
 
   return (

@@ -3,19 +3,21 @@ import { useAuth } from "../../context";
 import generateRandomRoomId from "../../utilities/generateRandomRoomId";
 import { ReactNode } from "react";
 
+type Room = {
+  id: number;
+  name: string;
+};
+
 interface RoomListProps {
   title: ReactNode;
   h: string;
-  rooms: string[];
-  joinRoom: (user: any, room: any) => Promise<void>;
+  rooms: Room[];
+  joinRoom: (room: any) => Promise<void>;
 }
 const RoomList = ({ title, rooms, joinRoom, h }: RoomListProps) => {
-  const { user, setRoomId } = useAuth();
-
   const handleCreateRoom = () => {
     const newRoomId = generateRandomRoomId();
-    joinRoom(user?.username, newRoomId);
-    setRoomId(newRoomId);
+    joinRoom(newRoomId);
   };
 
   return (
@@ -27,11 +29,11 @@ const RoomList = ({ title, rooms, joinRoom, h }: RoomListProps) => {
       >
         {rooms.map((room, index) => (
           <div
-            key={index}
+            key={room.id + "rooms"}
             className="px-4 py-2 text-2xl font-light text-white rounded-md hover:bg-[#292017ef]  hover:cursor-pointer  transition-transform transform hover:scale-110"
-            //  onClick={() => onRoomClick(room)}
+            onClick={() => joinRoom(room.id)}
           >
-            {room}
+            {room.name}
           </div>
         ))}
       </div>

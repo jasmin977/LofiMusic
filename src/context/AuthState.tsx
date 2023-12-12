@@ -5,13 +5,13 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { IUser } from "../models";
+import { IRoom, IUser } from "../models";
 
 type AuthContextType = {
   user: IUser | null;
   setUser: (user: IUser | null) => void;
-  roomId: string | null;
-  setRoomId: (room: string | null) => void;
+  room: IRoom | null;
+  setRoom: (room: IRoom | null) => void;
 };
 interface Props {
   children: ReactNode;
@@ -20,28 +20,21 @@ interface Props {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
-  roomId: null,
-  setRoomId: () => {},
+  room: null,
+  setRoom: () => {},
 });
 
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<IUser | null>(null);
-  const [roomId, setRoomId] = useState<string | null>(null);
+  const [room, setRoom] = useState<IRoom | null>(null);
 
-  /* useEffect(() => {
-    const fetchData = async () => {
-      setUser(user);
-    };
-
-    fetchData();
-  }, []); */
   return (
     <AuthContext.Provider
       value={{
         user,
-        roomId,
+        room,
         setUser,
-        setRoomId,
+        setRoom,
       }}
     >
       {children}

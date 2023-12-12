@@ -4,15 +4,16 @@ import { Controller, useForm } from "react-hook-form";
 import { Palette } from "../../themes";
 import { useAuth } from "../../context";
 import generateRandomRoomId from "../../utilities/generateRandomRoomId";
+import axios from "axios";
 
 interface roomDTO {
   roomid: string;
 }
 interface props {
-  joinRoom: (user: any, room: any) => Promise<void>;
+  joinRoom: (room: any) => Promise<void>;
 }
 function EnterRoom({ joinRoom }: props) {
-  const { user, setRoomId } = useAuth();
+  const { user } = useAuth();
   const {
     control,
     handleSubmit,
@@ -24,20 +25,26 @@ function EnterRoom({ joinRoom }: props) {
   });
 
   const handleEnterRoom = (data: roomDTO) => {
-    joinRoom(user?.username, data.roomid);
-    setRoomId(data.roomid);
+    joinRoom(data.roomid);
   };
   const handleCreateRoom = () => {
-    const newRoomId = generateRandomRoomId();
-    joinRoom(user?.username, newRoomId);
-    setRoomId(newRoomId);
+    const roomName = generateRandomRoomId();
+    axios
+      .post(`https://localhost:7270/api/Rooms`, {
+        roomName,
+      })
+      .then((res) => {
+        console.log("🚀 ~ file: Register.tsx:46 ~ .then ~ res:", res);
+        joinRoom(res.data.id);
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
     <div className="p-4">
       <div className="flex flex-col items-center gap-2 text-white">
         <span className="text-2xl font-medium text-white">
-          Welcome {user?.username} 🥰
+          Welcome {user?.userName} 🥰
         </span>
         {/*    <span className="text-5xl font-semibold">Choose between</span> */}
       </div>

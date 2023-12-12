@@ -14,12 +14,12 @@ const MyDialog: React.FC<CustomDialogProps> = ({
   onClose,
   children,
 }) => {
-  const { roomId } = useAuth();
+  const { room } = useAuth();
   useEffect(() => {
-    if (roomId) {
+    if (room) {
       onClose();
     }
-  }, [roomId]);
+  }, [room]);
 
   const overlayClasses = isOpen
     ? "fixed inset-0 bg-[#0000009d] z-40  "

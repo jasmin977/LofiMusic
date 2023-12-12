@@ -8,10 +8,6 @@ interface ConnectedUsersProps {
   connectedUsers: IUser[];
 }
 function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
-  console.log(
-    "🚀 ~ file: ConnectedUsers.tsx:11 ~ ConnectedUsers ~ connectedUsers:",
-    connectedUsers
-  );
   const { inviteUsersCard } = useAppuStatu();
   const [userToAdd, setUserToAdd] = useState("");
 
@@ -43,7 +39,7 @@ function ConnectedUsers({ connectedUsers }: ConnectedUsersProps) {
               }}
               key={idx}
             >
-              {u.username}
+              {u.userName}
             </div>
           ))}
         </div>

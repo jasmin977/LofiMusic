@@ -1,38 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { DraggableCard } from "../../components/shared";
-import { useAppState, useAppuStatu, useSignalRContext } from "../../context";
+import {
+  useAppState,
+  useAppuStatu,
+  useAuth,
+  useSignalRContext,
+} from "../../context";
 import { Palette } from "../../themes";
 import { HopOff, Pause, Play, Plus, RotateCcw, Zap } from "lucide-react";
 import { IPomodorClock } from "../../models";
 
 function PomodoroCard() {
+  const { room } = useAuth();
   const { connection } = useSignalRContext();
   const [isActive, setIsActive] = useState(false);
   const [seconds, setSeconds] = useState(10); // 25 minutes in seconds
   const [isBreak, setIsBreak] = useState(false);
-  /*   const [workDuration, setWorkDuration] = useState(25 * 60); // 25 minutes in seconds
-  const [breakDuration, setBreakDuration] = useState(5 * 60); // 5 minutes in seconds */
-  const [workDuration, setWorkDuration] = useState(10); // 25 minutes in seconds
-  const [breakDuration, setBreakDuration] = useState(5); // 5 minutes in seconds
-  const progress = ((workDuration - seconds) / workDuration) * 100;
+  const [displayWorkTimer, setDisplayWorkTimer] = useState(true);
+  const [workDurationInSeconds, setWorkDurationInSeconds] = useState(10 * 60); // 25 minutes in seconds
+  const [breakDurationInSeconds, setBreakDurationInSeconds] = useState(5 * 60); // 5 minutes in seconds
+  const progress =
+    ((workDurationInSeconds - seconds) / workDurationInSeconds) * 100;
+  const intervalRef = React.useRef<any>(null);
 
   useEffect(() => {
-    let interval: any;
+    if (room) {
+      setTimer(
+        room.pomodorClock.workDurationMinutes,
+        room.pomodorClock.breakDurationMinutes,
+        false
+      );
+    }
+  }, [room]);
+
+  useEffect(() => {
+    const handleInterval = () => {
+      setSeconds((prevSeconds) => prevSeconds - 1);
+    };
 
     if (isActive && seconds > 0) {
-      interval = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds - 1);
-      }, 1000);
+      intervalRef.current = setInterval(handleInterval, 1000);
     } else if (isActive && seconds === 0) {
       // Switch between work and break modes
       setIsBreak((prevIsBreak) => !prevIsBreak);
 
       // Set the new duration based on the mode
-      setSeconds(isBreak ? breakDuration : workDuration);
+      setSeconds(isBreak ? breakDurationInSeconds : workDurationInSeconds);
     }
 
-    return () => clearInterval(interval);
-  }, [isActive, seconds, isBreak, workDuration, breakDuration]);
+    return () => clearInterval(intervalRef.current);
+  }, [
+    isActive,
+    seconds,
+    isBreak,
+    workDurationInSeconds,
+    breakDurationInSeconds,
+  ]);
   useEffect(() => {
     connection?.on(
       "UpdatePomodorTimer",
@@ -62,7 +85,7 @@ function PomodoroCard() {
   };
 
   const handleRepeat = () => {
-    setSeconds(isBreak ? breakDuration : workDuration);
+    setSeconds(isBreak ? breakDurationInSeconds : workDurationInSeconds);
     setIsActive(true);
   };
 
@@ -73,8 +96,8 @@ function PomodoroCard() {
   ) => {
     const newWorkDuration = newWorkDurationInMinutes * 60;
     const newBreakDuration = newBreakDurationInMinutes * 60;
-    setWorkDuration(newWorkDuration);
-    setBreakDuration(newBreakDuration);
+    setWorkDurationInSeconds(newWorkDuration);
+    setBreakDurationInSeconds(newBreakDuration);
     setSeconds(isBreak ? newBreakDuration : newWorkDuration);
     setIsBreak(false);
     setIsActive(isActive);
@@ -84,11 +107,6 @@ function PomodoroCard() {
     newWorkDurationInMinutes: number,
     newBreakDurationInMinutes: number
   ) => {
-    console.log(
-      "🚀 ~ file: PomodoroCard.tsx:88 ~ PomodoroCard ~ newWorkDurationInMinutes, newBreakDurationInMinutes:",
-      newWorkDurationInMinutes,
-      newBreakDurationInMinutes
-    );
     SetPomodorTimer(newWorkDurationInMinutes, newBreakDurationInMinutes);
   };
 
@@ -228,8 +246,8 @@ function PomodoroCard() {
           <input
             type="number"
             min="1"
-            value={workDuration / 60}
-            onChange={(e) => setWorkDuration(Number(e.target.value) * 60)}
+            value={workDurationInSeconds / 60}
+            onChange={(e) => setWorkDurationInSeconds(Number(e.target.value) * 60)}
           />
         </div>
         <div>
@@ -237,8 +255,8 @@ function PomodoroCard() {
           <input
             type="number"
             min="1"
-            value={breakDuration / 60}
-            onChange={(e) => setBreakDuration(Number(e.target.value) * 60)}
+            value={breakDurationInSeconds / 60}
+            onChange={(e) => setBreakDurationInSeconds(Number(e.target.value) * 60)}
           />
         </div>
        */}

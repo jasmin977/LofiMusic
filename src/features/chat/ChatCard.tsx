@@ -74,29 +74,38 @@ function ChatCard({ messages }: chatProps) {
           id="message-container"
           className="flex-1 px-2 pt-2 mb-[70px] overflow-y-auto custom-scrollbar"
         >
-          {messages.map((item, index) => (
-            <div
-              key={item.id}
-              className={`flex flex-col py-2    items-${
-                true ? "end" : "start"
-              } space-y-2`}
-            >
+          {messages.map((item, index) => {
+            console.log(
+              "🚀 ~ file: ChatCard.tsx:78 ~ {messages.map ~ item:",
+              item
+            );
+
+            return (
               <div
-                style={{
-                  backgroundColor: true ? Palette.minicard : Palette.background,
-                  borderColor: Palette.border,
-                  color: Palette.text,
-                }}
-                className="max-w-xs p-2 text-lg font-normal border-2 rounded-lg"
+                key={item.id}
+                className={`flex flex-col py-2    items-${
+                  true ? "end" : "start"
+                } space-y-2`}
               >
-                {item.content}
+                <div
+                  style={{
+                    backgroundColor: true
+                      ? Palette.minicard
+                      : Palette.background,
+                    borderColor: Palette.border,
+                    color: Palette.text,
+                  }}
+                  className="max-w-xs p-2 text-lg font-normal border-2 rounded-lg"
+                >
+                  {item.content}
+                </div>
+                <span style={{ color: Palette.text }} className="text-sm ">
+                  {item.sender ? item.sender?.userName : "boboBot"} •{" "}
+                  {formatDate(item.createdAt)}
+                </span>
               </div>
-              <span style={{ color: Palette.text }} className="text-sm ">
-                {item.sender ? item.sender?.username : "boboBot"} •{" "}
-                {formatDate(item.createdAt)}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="fixed bottom-0 left-0 w-full p-4 ">
